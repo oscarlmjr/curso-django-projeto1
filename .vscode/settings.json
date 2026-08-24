@@ -45,7 +45,7 @@
     "python.terminal.useEnvFile": true,
     "python.envFile": "${workspaceFolder}/.env",
     "python.testing.pytestArgs": [
-        "projeto1"
+        "project1"
     ],
     "python.testing.pytestEnabled": true
 

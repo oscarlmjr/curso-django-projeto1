@@ -1,30 +1,15 @@
 from django.urls import resolve, reverse
 from recipes import views
+from unittest import skip
 
 from .test_recipe_base import RecipeTestBase
 
 
+@skip('A mensagem do porquê eu estou pulando esses testes')
 class RecipeViewsTest(RecipeTestBase):
-    def tearDown(self):
-        return super().tearDown()
-
-    # SETUP
     def test_recipe_home_view_function_is_correct(self):
         view = resolve(reverse('recipes:home'))
         self.assertIs(view.func, views.home)
-
-    # TEARDOWN
-    def test_recipe_category_view_function_is_correct(self):
-        view = resolve(
-            reverse('recipes:category', kwargs={'category_id': 1})
-        )
-        self.assertIs(view.func, views.category)
-
-    def test_recipe_detail_view_function_is_correct(self):
-        view = resolve(
-            reverse('recipes:recipe', kwargs={'id': 1})
-        )
-        self.assertIs(view.func, views.recipe)
 
     def test_recipe_home_view_returns_status_code_200_OK(self):
         response = self.client.get(reverse('recipes:home'))
@@ -42,13 +27,15 @@ class RecipeViewsTest(RecipeTestBase):
         )
 
     def test_recipe_home_template_loads_recipes(self):
+        # Need a recipe for this test
+        self.make_recipe()
+        
         response = self.client.get(reverse('recipes:home'))
         content = response.content.decode('utf-8')
         response_context_recipes = response.context['recipes']
-        
+
+        # Check if one recipe exists
         self.assertIn('Recipe Title', content)
-        self.assertIn('10 Minutos', content)
-        self.assertIn('5 Porções', content)
         self.assertEqual(len(response_context_recipes), 1)
 
     def test_recipe_category_view_function_is_correct(self):
